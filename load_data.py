@@ -30,11 +30,11 @@ def loadDataJSRT(df, path, im_shape):
     X -= X.mean()
     X /= X.std()
 
-    print '### Data loaded'
-    print '\t{}'.format(path)
-    print '\t{}\t{}'.format(X.shape, y.shape)
-    print '\tX:{:.1f}-{:.1f}\ty:{:.1f}-{:.1f}\n'.format(X.min(), X.max(), y.min(), y.max())
-    print '\tX.mean = {}, X.std = {}'.format(X.mean(), X.std())
+    print( '### Data loaded')
+    print( '\t{}'.format(path))
+    print( '\t{}\t{}'.format(X.shape, y.shape))
+    print( '\tX:{:.1f}-{:.1f}\ty:{:.1f}-{:.1f}\n'.format(X.min(), X.max(), y.min(), y.max()))
+    print( '\tX.mean = {}, X.std = {}'.format(X.mean(), X.std()))
     return X, y
 
 
@@ -60,11 +60,11 @@ def loadDataMontgomery(df, path, im_shape):
     X -= X.mean()
     X /= X.std()
 
-    print '### Data loaded'
-    print '\t{}'.format(path)
-    print '\t{}\t{}'.format(X.shape, y.shape)
-    print '\tX:{:.1f}-{:.1f}\ty:{:.1f}-{:.1f}\n'.format(X.min(), X.max(), y.min(), y.max())
-    print '\tX.mean = {}, X.std = {}'.format(X.mean(), X.std())
+    print( '### Data loaded')
+    print( '\t{}'.format(path))
+    print( '\t{}\t{}'.format(X.shape, y.shape))
+    print( '\tX:{:.1f}-{:.1f}\ty:{:.1f}-{:.1f}\n'.format(X.min(), X.max(), y.min(), y.max()))
+    print( '\tX.mean = {}, X.std = {}'.format(X.mean(), X.std()))
     return X, y
 
 
@@ -86,10 +86,64 @@ def loadDataGeneral(df, path, im_shape):
     X -= X.mean()
     X /= X.std()
 
-    print '### Dataset loaded'
-    print '\t{}'.format(path)
-    print '\t{}\t{}'.format(X.shape, y.shape)
-    print '\tX:{:.1f}-{:.1f}\ty:{:.1f}-{:.1f}\n'.format(X.min(), X.max(), y.min(), y.max())
-    print '\tX.mean = {}, X.std = {}'.format(X.mean(), X.std())
-    return X, y
+    print( '### Dataset loaded')
+    return X,y
+    # print( '\t{}'.format(path))
+    # print( '\t{}\t{}'.format(X.shape, y.shape)
+    # # print( '\tX:{:.1f}-{:.1f}\ty:{:.1f}-{:.1f}\n'.format(X.min(), X.max(), y.min(), y.max())
+    # # print( '\tX.mean = {}, X.std = {}'.format(X.mean(), X.std())
+    # r
+def loadTestingData(image_paths, im_shape):
 
+    X= []
+    shapes=[]
+
+    for i in range(len(image_paths)):
+
+        img = io.imread(image_paths[i])
+        shapes.append(img.shape)
+
+
+        img = transform.resize(img, im_shape)
+
+        img = np.expand_dims(img, -1)
+        X.append(img)
+
+
+    X = np.array(X)
+    X -= X.mean()
+    X /= X.std()
+    
+    return X,shapes
+
+def loadTrainingData(image_paths, mask_paths, im_shape):
+
+    X, y = [], []
+
+    for i in range(len(image_paths)):
+
+        img = io.imread(image_paths[i])
+
+        img = transform.resize(img, im_shape)
+
+        img = np.expand_dims(img, -1)
+
+        mask = io.imread(mask_paths[i])
+
+        mask = transform.resize(mask, im_shape)
+
+        mask = np.expand_dims(mask, -1)
+
+        X.append(img)
+
+        y.append(mask)
+
+    X = np.array(X)
+
+    y = np.array(y)
+
+    X -= X.mean()
+
+    X /= X.std()
+    
+    return X,y
